@@ -58,9 +58,9 @@ set(MIC_OFFLOAD_FOUND false)
 
 option(ENABLE_MIC "Enable native builds for the MIC architecture (Intel Knights Corner)" ON)
 if(ENABLE_MIC)
-   file(GLOB _intel_dirs "/opt/intel/compilers_and_libraries_*/linux")
+   file(GLOB _intel_dirs "@EPREFIX@/opt/intel/compilers_and_libraries_*/linux")
    if ("${_intel_dirs}" STREQUAL "")
-      file(GLOB _intel_dirs "/opt/intel/composer_xe_*")
+      file(GLOB _intel_dirs "@EPREFIX@/opt/intel/composer_xe_*")
    endif()
 
    list(SORT _intel_dirs)
