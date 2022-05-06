@@ -73,6 +73,13 @@ Vc_ALWAYS_INLINE void executeScatter(BitScanLoopT,
                                     typename V::MaskArgument mask)
 {
     size_t bits = mask.toInt();
+#ifdef Vc_MSVC
+    while (bits) {
+        const int i = _bit_scan_forward(bits);
+        bits ^= (1 << i); // btr?
+        mem[indexes[i]] = v[i];
+    }
+#else
     while (Vc_IS_LIKELY(bits > 0)) {
         size_t i, j;
         asm("bsf %[bits],%[i]\n\t"
@@ -83,15 +90,7 @@ Vc_ALWAYS_INLINE void executeScatter(BitScanLoopT,
         mem[indexes[i]] = v[i];
         mem[indexes[j]] = v[j];
     }
-
-    /* Alternative from Vc::SSE (0.7)
-    int bits = mask.toInt();
-    while (bits) {
-        const int i = _bit_scan_forward(bits);
-        bits ^= (1 << i); // btr?
-        mem[indexes[i]] = v[i];
-    }
-    */
+#endif
 }
 
 template <typename V, typename MT, typename IT>
