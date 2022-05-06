@@ -160,12 +160,10 @@ template <typename V> using ConstIterator = Iterator<const V>;
 
         void nextBit()
         {
-#ifdef Vc_GNU_ASM
-            bit = __builtin_ctzl(mask);
-#elif defined(Vc_MSVC)
+#ifdef Vc_MSVC
             _BitScanForward(&bit, mask);
 #else
-#error "Not implemented yet. Please contact vc-devel@compeng.uni-frankfurt.de"
+            bit = __builtin_ctzl(mask);
 #endif
         }
         void resetLsb()
